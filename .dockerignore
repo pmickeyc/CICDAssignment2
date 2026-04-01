@@ -1,0 +1,15 @@
+.git
+.settings
+bin
+src
+.classpath
+.project
+target/classes
+target/generated-sources
+target/generated-test-sources
+target/maven-status
+target/surefire-reports
+target/test-classes
+target/site
+target/*.jar.original
+target/*.exec
