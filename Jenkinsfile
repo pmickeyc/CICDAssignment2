@@ -108,7 +108,7 @@ exit 1
 @echo off
 setlocal
 set "EXISTING_CONTAINER="
-for /f %%i in ('docker ps -aq --filter "name=^/${env.DEPLOY_CONTAINER_NAME}$"') do set "EXISTING_CONTAINER=%%i"
+for /f %%i in ('docker ps -aq --filter "name=^/${env.DEPLOY_CONTAINER_NAME}\$"') do set "EXISTING_CONTAINER=%%i"
 if defined EXISTING_CONTAINER (
   docker rm -f ${env.DEPLOY_CONTAINER_NAME}
   if errorlevel 1 exit /b %errorlevel%
@@ -116,11 +116,11 @@ if defined EXISTING_CONTAINER (
 docker run -d --name ${env.DEPLOY_CONTAINER_NAME} -p ${env.DEPLOY_HOST_PORT}:${env.DEPLOY_CONTAINER_PORT} ${env.IMAGE_LATEST}
 if errorlevel 1 exit /b %errorlevel%
 powershell -NoProfile -Command ^
-  "$ProgressPreference='SilentlyContinue';" ^
-  "for ($i = 0; $i -lt 30; $i++) {" ^
+  "\$ProgressPreference='SilentlyContinue';" ^
+  "for (\$i = 0; \$i -lt 30; \$i++) {" ^
   "  try {" ^
-  "    $response = Invoke-WebRequest -UseBasicParsing '${env.DEPLOY_HEALTHCHECK_URL}';" ^
-  "    if ($response.StatusCode -eq 200) { exit 0 }" ^
+  "    \$response = Invoke-WebRequest -UseBasicParsing '${env.DEPLOY_HEALTHCHECK_URL}';" ^
+  "    if (\$response.StatusCode -eq 200) { exit 0 }" ^
   "  } catch {}" ^
   "  Start-Sleep -Seconds 2" ^
   "}" ^
