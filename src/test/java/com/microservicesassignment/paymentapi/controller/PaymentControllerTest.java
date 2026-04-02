@@ -70,6 +70,27 @@ class PaymentControllerTest {
     }
 
     @Test
+    void createPayment_demoFailure_expectsWrongStatus() throws Exception {
+        PaymentResponse response = buildResponse(25L, 99L, PaymentStatus.PENDING);
+        when(paymentService.createPayment(any(CreatePaymentRequest.class))).thenReturn(response);
+
+        String requestBody = """
+            {
+              "salesOrderId": 99,
+              "customerId": 7,
+              "amount": 149.95,
+              "paymentMethod": "CARD"
+            }
+            """;
+
+        mockMvc.perform(post("/api/payments/v1/payments")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.status").value("PAID"));
+    }
+
+    @Test
     void getPayments_returnsPagedEnvelope() throws Exception {
         PaymentResponse response = buildResponse(4L, 4L, PaymentStatus.PAID);
         when(paymentService.getPayments(eq(2L), eq(PaymentStatus.PAID), eq(PaymentMethod.CARD), any()))
