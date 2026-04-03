@@ -69,6 +69,7 @@ class PaymentControllerTest {
             .andExpect(jsonPath("$.status").value("PENDING"));
     }
 
+    ////Bad Test
     // @Test
     // void createPayment_demoFailure_expectsWrongStatus() throws Exception {
     //     PaymentResponse response = buildResponse(25L, 99L, PaymentStatus.PENDING);
